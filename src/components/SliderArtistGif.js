@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
 
 export default function SliderArtistGif({ data }) {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const updateWidth = () => {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', updateWidth);
+    return (() => {
+      window.removeEventListener('resize', updateWidth);
+    })
+  }, [width])
+
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: width >= 1000 ? 3 : 2,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     speed: 2000,
     autoplaySpeed: 4000,
     cssEase: "linear",
@@ -20,7 +33,9 @@ export default function SliderArtistGif({ data }) {
         <Wrap key={gif.id}>
           <img src={gif.images.original.url} alt={gif.title} />
           <InfoContainer>
-            <Avatar src={gif.user?.avatar_url} alt="" />
+            <Avatar>
+              <img src={gif.user?.avatar_url} alt=""/>
+            </Avatar>
             <Data>
               <h3>{gif?.username}</h3>
               <h4>{gif.user?.display_name}</h4>
@@ -71,11 +86,17 @@ const Carousel = styled(Slider)`
 const Wrap = styled.div`
   cursor: pointer;
   position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  top: 0;
+  left: 0;
 
   img {
     width: 100%;
+    height: 260px;
     padding: 0 4px;
-    max-height: 240px;
     object-fit: cover;
     border-radius: 6px;
   }
@@ -83,14 +104,23 @@ const Wrap = styled.div`
 
 const InfoContainer = styled.div`
   position: absolute;
-  display: flex;
   bottom: 10px;
   left: 10px;
+  right: 10px;
+  display: flex;
+  height: 36px;
 `;
 
-const Avatar = styled.img`
-  max-width: 50px;
-  object-fit: cover;
+const Avatar = styled.div`
+  float: left;
+  height: 36px;
+  margin-right: 4px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Data = styled.div`

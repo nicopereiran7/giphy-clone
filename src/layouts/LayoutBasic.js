@@ -21,7 +21,11 @@ const AppContainer = styled.div`
     padding: 0 240px;
   }
 
-  @media (max-width: 1390) {
+  @media (max-width: 1400px) {
     padding: 0 100px;
+  }
+
+  @media (max-width: 1000px) {
+    padding: 0 20px;
   }
 `;
