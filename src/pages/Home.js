@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SlideBasic from "../components/SlideBasic";
 import axios from "../api/axios";
-import { API_KEY } from "../utils/constants";
 import styled from "styled-components";
 import { AiOutlineRise, AiFillThunderbolt, AiFillSound } from "react-icons/ai";
 import SliderArtistGif from "../components/SliderArtistGif";
@@ -17,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     async function fechData() {
       await axios
-        .get(`/trending?api_key=${API_KEY}&limit=20`)
+        .get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=20`)
         .then((response) => {
           setTrending(response.data.data);
         })
@@ -30,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     async function fechData() {
       await axios
-        .get(`/trending?api_key=${API_KEY}&limit=6`)
+        .get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=6`)
         .then((response) => {
           setArtistGifs(response.data.data);
         })

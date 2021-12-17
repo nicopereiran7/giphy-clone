@@ -68,6 +68,10 @@ const Center = styled.div`
   display: flex;
   justify-content: center;
 
+  @media(max-width: 1600px) {
+    display: none;
+  }
+
   a {
     position: relative;
     display: block;
@@ -112,7 +116,11 @@ const Right = styled.div`
   align-items: center;
 `;
 
-const Btns = styled.div``;
+const Btns = styled.div`
+  @media(max-width: 1000px) {
+    display: none;
+  }
+`;
 
 const ButtonOption = styled(Link)`
   padding: 8px 16px;

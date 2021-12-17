@@ -1,8 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 export default function SlideBasic({ data }) {
+  const history = useHistory();
   const settings = {
     className: "slider variable-width",
     dots: true,
@@ -16,7 +18,7 @@ export default function SlideBasic({ data }) {
   return (
     <Carousel {...settings}>
       {data?.map((gif) => (
-        <Wrap key={gif.id}>
+        <Wrap key={gif.id} onClick={() => history.push(`/gif/${gif.id}`)}>
           <img src={gif.images.original.url} alt={gif.title} />
         </Wrap>
       ))}

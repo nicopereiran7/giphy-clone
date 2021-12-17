@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useHistory, useParams } from "react-router-dom";
 
 export default function SearchBar() {
+  const searchInput = useRef("");
+  const history = useHistory();
+  const params = useParams();
+
+  useEffect(() => {
+    if(params.term) {
+      searchInput.current.value = params.term;
+    }
+  }, [params?.term])
+
+  const search = () => {
+    history.push(`/search/${searchInput.current.value}`);
+  }
+
   return (
     <FormContainer>
       <Form>
-        <Input type="text" placeholder="Search all the GIFs" />
-        <ButtonSubmit type="submit">
+        <Input type="text" placeholder="Search all the GIFs" ref={searchInput}/>
+        <ButtonSubmit onClick={search}>
           <AiOutlineSearch />
         </ButtonSubmit>
       </Form>
@@ -23,7 +38,7 @@ const FormContainer = styled.div`
   z-index: 1;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   padding: 4px 0;
   display: flex;
   align-items: center;
