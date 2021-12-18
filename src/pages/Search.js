@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import LayoutBasic from "../layouts/LayoutBasic";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "../api/axios";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { ImageList, ImageListItem } from "@mui/material";
 import { Helmet } from "react-helmet";
 import { LinearProgress } from "@material-ui/core";
 
 export default function Search() {
   const params = useParams();
+  const history = useHistory();
   const [results, setResults] = useState(null);
   const [totalResults, setTotalResults] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const updateWidth = () => {
+    setWidth(window.innerWidth);
+  }
 
   useEffect(() => {
     setResults(null);
@@ -26,6 +32,13 @@ export default function Search() {
     }
     fechSearch();
   }, [params?.term])
+
+  useEffect(() => {
+    window.addEventListener('resize', updateWidth);
+    return (() => {
+      window.removeEventListener('resize', updateWidth);
+    })
+  }, [width])
 
   const addGif = async () => {
     setOffset(offset + 40);
@@ -53,15 +66,28 @@ export default function Search() {
           <h1>{params.term}<span>{totalResults} GIFs</span></h1>
         </SearchHeader>
         {results ? (
-          <SearchContent>
-          {results?.map((item, index) => (
-            <Gif key={index}>
-              <Link to={`/gif/${item.id}`}>
-                <img src={item.images?.original?.url} alt={item.title}/>
-              </Link>
-            </Gif>
-          ))}
-        </SearchContent>
+        //   <SearchContent>
+        //   {results?.map((item, index) => (
+        //     <Gif key={index}>
+        //       <Link to={`/gif/${item.id}`}>
+        //         <img src={item.images?.original?.url} alt={item.title}/>
+        //       </Link>
+        //     </Gif>
+        //   ))}
+        // </SearchContent>
+          <ImageList variant="masonry" cols={width>=960 ? 3 : width >= 600 ? 2 : 1} gap={8}>
+            {results.map((item, index) => (
+              <ImageListItem key={index}>
+                <img
+                  src={item.images?.original?.url}
+                  srcSet={`${item.images?.original?.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                  onClick={() => history.push(`/gif/${item.id}`)}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
         ):(
           <LinearProgress />
         )}
@@ -96,33 +122,3 @@ const SearchHeader = styled.div`
     }
   }
 `;
-
-const SearchContent = styled.div`
-  display: grid;
-  grid-gap: 20px;
-  gap: 20px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-
-  @media (max-width: 1600px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-`;
-
-const Gif = styled.div`
-  img {
-    inset: 0px;
-    display: block;
-    object-fit: cover;
-    width: 100%;
-    opacity: 1;
-    transition: 0.5s ease all;
-  }
-`

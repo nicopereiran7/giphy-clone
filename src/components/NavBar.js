@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineMore } from "react-icons/ai";
 import Logo from "../assets/svg/giphy-logo-1.svg";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoClose } from "react-icons/io5";
+import HamburgerMenu from "./HamburgerMenu";
+
 
 export default function NavBar() {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [hamburgerIsOpen, setHamburgerIsOpen] = useState(false);
+
+  const updateWidth = () => {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', updateWidth);
+    return (() => {
+      window.removeEventListener('resize', updateWidth);
+    })
+  }, [width])
+
   return (
     <NavContainer>
       <Left data-aos="fade-left">
-        <img src={Logo} alt="logo" />
         <Link to="/">
+          <img src={Logo} alt="logo" />
+        </Link>
+        <Link to="/" className="logo-name">
           <h1>GIPHY</h1>
         </Link>
       </Left>
@@ -23,7 +43,8 @@ export default function NavBar() {
           <AiOutlineMore />
         </Link>
       </Center>
-      <Right>
+      {width >= 590 ? (
+        <Right>
         <Btns>
           <ButtonOption to="/upload">Upload</ButtonOption>
           <ButtonOption to="#">Create</ButtonOption>
@@ -32,6 +53,15 @@ export default function NavBar() {
           <ButtonLogin to="/login">Log in</ButtonLogin>
         </AuthContainer>
       </Right>
+      ) : 
+      !hamburgerIsOpen ? (
+        <GiHamburgerMenu onClick={() => setHamburgerIsOpen(true)}/>
+      ) : ( 
+        <>
+          <IoClose onClick={() => setHamburgerIsOpen(false)} style={{ zIndex: 9999 }}/>
+          <HamburgerMenu hamburgerIsOpen={hamburgerIsOpen}/>
+        </>
+      )}
     </NavContainer>
   );
 }
@@ -54,13 +84,17 @@ const Left = styled.div`
     height: 30px;
   }
 
-  a {
+  .logo-name {
     text-decoration: none;
     color: #fff;
     font-weight: 800;
     margin-left: 6px;
     transition: 0.5s;
     transform-origin: left;
+
+    @media (max-width: 500px) {
+      display: none;
+    }
   }
 `;
 

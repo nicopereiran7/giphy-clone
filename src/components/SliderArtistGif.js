@@ -19,9 +19,10 @@ export default function SliderArtistGif({ data }) {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: width >= 1000 ? 3 : 2,
+    centerMode: true,
+    slidesToShow: width >= 1000 ? 3 : width >= 700 ? 2 : 1,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     speed: 2000,
     autoplaySpeed: 4000,
     cssEase: "linear",
