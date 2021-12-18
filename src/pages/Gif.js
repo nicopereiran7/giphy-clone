@@ -80,9 +80,8 @@ export default function Gif() {
                 </div>
               </IconsContainer>
             </MainGif>
+            <Related />
           </Container>
-
-          <Related />
         </GifContent>
       )}
     </LayoutBasic>
