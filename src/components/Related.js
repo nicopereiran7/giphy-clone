@@ -16,6 +16,7 @@ export default function Related() {
 
   useEffect(() => {
     async function fechRelatedGifs() {
+      setRelatedGifs([]);
       try {
         let offset = Math.floor(Math.random() * 100) + 1;
         const response = await axios.get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=8&offset=${offset}`);

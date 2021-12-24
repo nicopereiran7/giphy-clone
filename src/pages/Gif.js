@@ -16,10 +16,11 @@ export default function Gif() {
 
   useEffect(() => {
     async function fechGif() {
+      setGif(null)
       try {
         const response = await axios.get(`/${params.id}?api_key=${process.env.REACT_APP_API_KEY}`);
         if(response.status === 200) {
-          setGif(response.data.data)
+          setGif(response.data.data);
         }
       }catch(err) {
         console.log(err);
@@ -63,7 +64,10 @@ export default function Gif() {
             <GifTitle>{gif?.title}</GifTitle>
             <MainGif>
               <ImgContainer>
-                <img src={gif.images?.original?.url} alt={gif.title} poster={gif.images.preview.mp4} />
+                {/* <img src={gif.images?.original?.url} alt={gif.title} poster={gif.images.preview.mp4} /> */}
+                <video autoPlay={true} loop={true} muted>
+                  <source src={gif.images?.original?.mp4} type="video/mp4"/>
+                </video>
               </ImgContainer>
               <IconsContainer>
                 <div className="item-icon">
@@ -138,6 +142,10 @@ const ImgContainer = styled.div`
   }
 
   img {
+    width: 100%;
+  }
+
+  video {
     width: 100%;
   }
 `
