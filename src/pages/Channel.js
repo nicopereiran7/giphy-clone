@@ -32,7 +32,7 @@ export default function Channel() {
         <LinearProgress />
       ) : (
         <ChannelMainContent>
-          {status === 0 ? (
+          {status === 200 ? (
             <>
             <ChannelBanner>
               <img src={channel.banner_image} alt={channel.display_name}/>

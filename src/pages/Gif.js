@@ -23,10 +23,8 @@ export default function Gif() {
       try {
         const response = await axios.get(`/${params.id}?api_key=${process.env.REACT_APP_API_KEY}`);
         if(response.status === 200) {
-          console.log(response.data.data);
           setGif(response.data.data);
           const channelResponse = await def_axios.get(`https://api.giphy.com/v1/channels/search?api_key=${process.env.REACT_APP_API_KEY}&q=${response.data.data.user.username}`);
-          console.log(channelResponse.data);
           if(channelResponse.data.data.length > 0) {
             setChannel(channelResponse.data.data[0]);
           }
