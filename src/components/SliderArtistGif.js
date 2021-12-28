@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 export default function SliderArtistGif({ data }) {
   const [width, setWidth] = useState(window.innerWidth);
+  const history = useHistory();
 
   const updateWidth = () => {
     setWidth(window.innerWidth);
@@ -32,7 +34,12 @@ export default function SliderArtistGif({ data }) {
     <Carousel {...settings}>
       {data.map((gif) => (
         <Wrap key={gif.id}>
-          <img src={gif.images.original.url} alt={gif.title} />
+          <img 
+            src={gif.images.original.url} 
+            alt={gif.title} 
+            className="gif" 
+            onClick={() => history.push(`/gif/${gif.id}`)}
+          />
           <InfoContainer>
             <Avatar>
               <img src={gif.user?.avatar_url} alt=""/>
@@ -85,7 +92,6 @@ const Carousel = styled(Slider)`
 `;
 
 const Wrap = styled.div`
-  cursor: pointer;
   position: relative;
   height: 100%;
   width: 100%;
@@ -94,12 +100,16 @@ const Wrap = styled.div`
   top: 0;
   left: 0;
 
-  img {
+  .gif {
     width: 100%;
     height: 260px;
     padding: 0 4px;
     object-fit: cover;
     border-radius: 6px;
+
+    &:hover { 
+      cursor: pointer;
+    }
   }
 `;
 

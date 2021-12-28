@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { useHistory, useParams } from "react-router-dom";
+import axios from "axios";
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const searchInput = useRef("");
   const history = useHistory();
   const params = useParams();
+  const [autocompleteResults, setAutocompleteResults] = useState(null);
 
   useEffect(() => {
     if(params.term) {
@@ -14,18 +16,46 @@ export default function SearchBar() {
     }
   }, [params?.term])
 
+  useEffect(() => {
+    setAutocompleteResults(null);
+  }, [params?.term])
+
   const search = () => {
     history.push(`/search/${searchInput.current.value}`);
+    setAutocompleteResults(null);
+  }
+
+  const autocomplete = async () => {
+    try {
+      const { data: response } = await axios.get(`https://api.giphy.com/v1/gifs/search/tags?api_key=${process.env.REACT_APP_API_KEY}&q=${searchInput.current.value}&limit=10`);
+      setAutocompleteResults(response.data);
+    }catch(err) {
+      console.log(err);
+    }
   }
 
   return (
     <FormContainer>
-      <Form>
+      <Form onChange={autocomplete}>
         <Input type="text" placeholder="Search all the GIFs" ref={searchInput}/>
         <ButtonSubmit onClick={search}>
           <AiOutlineSearch />
         </ButtonSubmit>
       </Form>
+      {autocompleteResults && (
+        <SuggestionsContainer>
+          <AutocompleteHeader>
+            <CloseAutocomplete>
+              <AiOutlineClose onClick={() => setAutocompleteResults(null)}/>
+            </CloseAutocomplete>
+          </AutocompleteHeader>
+          {autocompleteResults.map((item, index) => (
+            <AutocompleteItem key={index} onClick={() => history.push(`/search/${item.name}`)}>
+              <h5>{item.name}</h5>
+            </AutocompleteItem>
+          ))}
+        </SuggestionsContainer>
+      )}
     </FormContainer>
   );
 }
@@ -71,6 +101,47 @@ const ButtonSubmit = styled.button`
   }
 
   &:hover {
+    cursor: pointer;
+  }
+`;
+
+const SuggestionsContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #121212;
+  margin-top: 56px;
+  overflow: hidden;
+  z-index: 10;
+`
+const AutocompleteHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const AutocompleteItem = styled.div`
+  padding: 10px 20px;
+  width: 100%;
+  transition: all .3s ease-in-out;
+
+  &:hover {
+    background-color: #7067ff;
+    cursor: pointer;
+  }
+
+  h5 {
+    color: #fff;
+  }
+`
+
+const CloseAutocomplete = styled.div`
+  width: 56px;
+  padding: 10px 20px;
+  transition: all .3s ease-in-out;
+
+  &:hover {
+    background-color: #7067ff;
     cursor: pointer;
   }
 `;

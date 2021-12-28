@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Video from "../assets/video/jordan-speer-logo.mp4";
+import { Helmet } from "react-helmet";
 
 export default function Login() {
   return (
     <LoginContainer>
+      <Helmet>
+        <title>Iniciar Sesion - Encuentra y comparte GIFs en Giphy</title>
+      </Helmet>
       <LeftContainer data-aos="fade-up">
         <video preload="auto" autoPlay loop>
           <source src={Video} type="video/mp4" />

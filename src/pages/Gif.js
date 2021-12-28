@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LayoutBasic from "../layouts/LayoutBasic";
 import axios from "../api/axios";
+import def_axios from "axios";
 import styled from "styled-components";
 import { LinearProgress } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -9,18 +10,26 @@ import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 import { MdFavorite, MdSend, MdContentCopy } from "react-icons/md";
 import { GoVerified } from "react-icons/go";
 import Related from "../components/Related";
+import { Helmet } from "react-helmet";
 
 export default function Gif() {
   const params = useParams();
   const [gif, setGif] = useState(null);
+  const [channel, setChannel] = useState(null);
 
   useEffect(() => {
+    setGif(null)
     async function fechGif() {
-      setGif(null)
       try {
         const response = await axios.get(`/${params.id}?api_key=${process.env.REACT_APP_API_KEY}`);
         if(response.status === 200) {
+          console.log(response.data.data);
           setGif(response.data.data);
+          const channelResponse = await def_axios.get(`https://api.giphy.com/v1/channels/search?api_key=${process.env.REACT_APP_API_KEY}&q=${response.data.data.user.username}`);
+          console.log(channelResponse.data);
+          if(channelResponse.data.data.length > 0) {
+            setChannel(channelResponse.data.data[0]);
+          }
         }
       }catch(err) {
         console.log(err);
@@ -31,6 +40,9 @@ export default function Gif() {
 
   return (
     <LayoutBasic>
+      <Helmet>
+        <title>{gif?.title ? gif.title : "Gif"} - Encuentra y comparte en Giphy</title>
+      </Helmet>
       {!gif ? (
         <LinearProgress />
       ):(
@@ -41,7 +53,7 @@ export default function Gif() {
                 <div className="avatar">
                   <img src={gif.user.avatar_url} alt={gif.user.username}/>
                   <div className="data">
-                    <Link to={`/user/${gif.user.username}`}><h2>{gif.user.display_name}</h2></Link>
+                    <Link to={channel ? `/channel/${channel?.id}` : '#'}><h2>{gif.user.display_name}</h2></Link>
                     <h3 onClick={() => window.open(gif.user.profile_url, '_blank')}>@{gif.user.username} {gif.user.is_verified && <GoVerified />}</h3>
                   </div>
                 </div>
@@ -232,7 +244,8 @@ const UserData = styled.div`
 
 const Networks = styled.div`
   .title {
-    padding: 20px 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
 
     h2 {
       color: #fff;
