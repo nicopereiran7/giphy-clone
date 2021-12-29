@@ -11,14 +11,18 @@ export default function SearchBar(props) {
   const [autocompleteResults, setAutocompleteResults] = useState(null);
 
   useEffect(() => {
+    setAutocompleteResults(null);
+
     if(params.term) {
       searchInput.current.value = params.term;
     }
   }, [params?.term])
 
   useEffect(() => {
-    setAutocompleteResults(null);
-  }, [params?.term])
+    if(searchInput.current.value === "") {
+      setAutocompleteResults(null);
+    }
+  }, [searchInput.current.value])
 
   const search = () => {
     history.push(`/search/${searchInput.current.value}`);
@@ -45,8 +49,8 @@ export default function SearchBar(props) {
       {autocompleteResults && (
         <SuggestionsContainer>
           <AutocompleteHeader>
-            <CloseAutocomplete>
-              <AiOutlineClose onClick={() => setAutocompleteResults(null)}/>
+            <CloseAutocomplete onClick={() => setAutocompleteResults(null)}>
+              <AiOutlineClose />
             </CloseAutocomplete>
           </AutocompleteHeader>
           {autocompleteResults.map((item, index) => (

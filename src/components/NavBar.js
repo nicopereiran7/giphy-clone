@@ -35,8 +35,8 @@ export default function NavBar() {
       </Left>
       <Center>
         <Link to="#">Reactions</Link>
-        <Link to="#">Entertaiment</Link>
-        <Link to="/upload">Sports</Link>
+        <Link to="/entertaiment">Entertainment</Link>
+        <Link to="/sport">Sports</Link>
         <Link to="#">Stickers</Link>
         <Link to="#">Artists</Link>
         <Link to="#">

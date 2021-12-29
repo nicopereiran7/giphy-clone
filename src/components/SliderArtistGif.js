@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import useScreenSize from "../hooks/useScreenSize";
 
 export default function SliderArtistGif({ data }) {
-  const [width, setWidth] = useState(window.innerWidth);
+  const width = useScreenSize();
   const history = useHistory();
-
-  const updateWidth = () => {
-    setWidth(window.innerWidth);
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', updateWidth);
-    return (() => {
-      window.removeEventListener('resize', updateWidth);
-    })
-  }, [width])
 
   const settings = {
     dots: true,
