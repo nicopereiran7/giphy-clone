@@ -47,7 +47,7 @@ export default function Gif() {
         <GifContent>
           <SideBar>
             <UserData>
-              {gif.user ? (
+              {gif.user && (
                 <div className="avatar">
                   <img src={gif.user.avatar_url} alt={gif.user.username}/>
                   <div className="data">
@@ -55,8 +55,6 @@ export default function Gif() {
                     <h3 onClick={() => window.open(gif.user.profile_url, '_blank')}>@{gif.user.username} {gif.user.is_verified && <GoVerified />}</h3>
                   </div>
                 </div>
-              ):(
-                <h2>No hay usuario</h2>
               )}
             </UserData>
             <Networks>

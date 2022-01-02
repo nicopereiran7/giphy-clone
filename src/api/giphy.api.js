@@ -1,4 +1,5 @@
 import axios from "./axios";
+import def_axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -31,3 +32,12 @@ export const getCatetgories = async () => {
   }
 }
 
+// http://upload.giphy.com/v1/gifs
+export const uploadGif = async (file, tags) => {
+  try {
+      const response = await def_axios.post(`http://upload.giphy.com/v1/gifs?api_key=${API_KEY}&username=JoeCool3000&tags=${tags.join()}`);
+      return response;
+  }catch(err) {
+    console.log(err)
+  }
+}

@@ -10,7 +10,9 @@ export default function LayoutBasic({ children }) {
       <MainContainer>
         <NavBar />
         <SearchBar />
-        {children}
+        <Content>
+          {children}
+        </Content>
       </MainContainer>
       <Footer />
     </AppContainer>
@@ -36,3 +38,5 @@ const MainContainer = styled.div`
     padding: 0 20px;
   }
 `;
+
+const Content = styled.div``;

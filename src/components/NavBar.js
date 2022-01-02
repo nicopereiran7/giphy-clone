@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineMore } from "react-icons/ai";
@@ -6,22 +6,12 @@ import Logo from "../assets/svg/giphy-logo-1.svg";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import HamburgerMenu from "./HamburgerMenu";
-
+import useScreenSize from "../hooks/useScreenSize";
+import DropdownCategories from "../components/DropDownCategories";
 
 export default function NavBar() {
-  const [width, setWidth] = useState(window.innerWidth);
+  const width = useScreenSize();
   const [hamburgerIsOpen, setHamburgerIsOpen] = useState(false);
-
-  const updateWidth = () => {
-    setWidth(window.innerWidth);
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', updateWidth);
-    return (() => {
-      window.removeEventListener('resize', updateWidth);
-    })
-  }, [width])
 
   return (
     <NavContainer>
@@ -34,25 +24,28 @@ export default function NavBar() {
         </Link>
       </Left>
       <Center>
-        <Link to="#">Reactions</Link>
-        <Link to="/entertaiment">Entertainment</Link>
-        <Link to="/sport">Sports</Link>
-        <Link to="#">Stickers</Link>
-        <Link to="#">Artists</Link>
-        <Link to="#">
+        <Link to="#" className="nav-item">Reactions</Link>
+        <Link to="/entertaiment" className="nav-item">Entertainment</Link>
+        <Link to="/sport" className="nav-item">Sports</Link>
+        <Link to="#" className="nav-item">Stickers</Link>
+        <Link to="#" className="nav-item">Artists</Link>
+        <div className="nav-item dropdown">
           <AiOutlineMore />
-        </Link>
+          <div className="dropdown-content">
+            <DropdownCategories />
+          </div>
+        </div>
       </Center>
       {width >= 590 ? (
         <Right>
-        <Btns>
-          <ButtonOption to="/upload">Upload</ButtonOption>
-          <ButtonOption to="#">Create</ButtonOption>
-        </Btns>
-        <AuthContainer>
-          <ButtonLogin to="/login">Log in</ButtonLogin>
-        </AuthContainer>
-      </Right>
+          <Btns>
+            <ButtonOption to="/upload">Upload</ButtonOption>
+            <ButtonOption to="#">Create</ButtonOption>
+          </Btns>
+          <AuthContainer>
+            <ButtonLogin to="/login">Log in</ButtonLogin>
+          </AuthContainer>
+        </Right>
       ) : 
       !hamburgerIsOpen ? (
         <GiHamburgerMenu onClick={() => setHamburgerIsOpen(true)}/>
@@ -102,17 +95,19 @@ const Center = styled.div`
   display: flex;
   justify-content: center;
 
-  @media(max-width: 1600px) {
+  @media(max-width: 1500px) {
     display: none;
   }
 
-  a {
+  .nav-item {
+    font-family: 'Open Sans', sans-serif;
     position: relative;
-    display: block;
+    display: inline-block;
     padding: 8px 16px;
     text-decoration: none;
     color: #fff;
     font-size: 14px;
+    font-weight: 700;
     border-bottom: 4px solid #7067ff;
     margin-right: 4px;
 
@@ -142,6 +137,27 @@ const Center = styled.div`
       opacity: 1;
       z-index: -1;
     }
+  }
+
+  .dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2;
+    animation: 0.5s ease 0s 1 normal none running;
+    border-top: 8px solid rgb(18, 18, 18);
+    width: 1104px;
+    top: 38px;
+    left: 100%;
+    margin-left: -745px;
+    flex-direction: column;
+    cursor: default;
+    background: linear-gradient(135deg, rgb(230, 70, 182) 0%, rgb(153, 51, 255) 100%);
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
   }
 `;
 

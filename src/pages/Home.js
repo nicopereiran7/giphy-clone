@@ -7,6 +7,7 @@ import SliderArtistGif from "../components/SliderArtistGif";
 import LayoutBasic from "../layouts/LayoutBasic";
 import Promo from "../components/Promo";
 import Clips from "../components/Clips";
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   const [trending, setTrending] = useState([]);
@@ -40,6 +41,9 @@ export default function Home() {
 
   return (
     <LayoutBasic>
+      <Helmet>
+        <title>GIPHY - Se Creativo</title>
+      </Helmet>
       <HomeContainer>
         <Promo />
         <Container data-aos="fade-up">

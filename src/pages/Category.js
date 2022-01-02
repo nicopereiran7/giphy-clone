@@ -6,6 +6,7 @@ import { useParams, Link } from "react-router-dom";
 import { LinearProgress } from "@mui/material";
 import { getCatetgories } from "../api/giphy.api";
 import Subcategories from '../components/Subcategories';
+import { Helmet } from "react-helmet";
 
 export default function Category() {
   const [categories, setCategories] = useState(null);
@@ -24,6 +25,9 @@ export default function Category() {
 
   return (
     <LayoutBasic>
+      <Helmet>
+        <title>{!category ? "Categoria" : category.name} - Encuentra y comparte en Giphy</title>
+      </Helmet>
       <CategoriesContainer>
         <SideBarContainer>
           {!categories ? (
@@ -35,7 +39,8 @@ export default function Category() {
                 {categories.map((item, index) => (
                   <Link 
                     to={`/categories/${item.name}`} 
-                    className={params.name === item.name && "active"}
+                    className={params.name === item.name ? "active" : ""}
+                    key={index}
                   >
                     {item.name}
                   </Link>
