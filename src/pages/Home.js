@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import SlideBasic from "../components/SlideBasic";
-import axios from "../api/axios";
 import styled from "styled-components";
 import { AiOutlineRise, AiFillThunderbolt, AiFillSound } from "react-icons/ai";
 import SliderArtistGif from "../components/SliderArtistGif";
@@ -9,35 +8,25 @@ import Promo from "../components/Promo";
 import Clips from "../components/Clips";
 import { Helmet } from "react-helmet";
 
+// REDUX
+import { fetchTrendingGifs } from "../store/slices/gifs/trendingGifsSlice";
+import { fetchArtistGifs } from "../store/slices/gifs/artistGifsSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 export default function Home() {
-  const [trending, setTrending] = useState([]);
-  const [artistGifs, setArtistGifs] = useState([]);
+  const dispatch = useDispatch();
+  const { list: trending } = useSelector(state => state.trendingGifs);
+  const { artistGifs } = useSelector(state => state.artistGifs);
 
   // Trending Gifs
   useEffect(() => {
-    async function fechData() {
-      await axios
-        .get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=20`)
-        .then((response) => {
-          setTrending(response.data.data);
-        })
-        .catch((err) => console.log(err.response));
-    }
-    fechData();
-  }, []);
+    dispatch(fetchTrendingGifs());
+  }, [dispatch]);
 
-  // Artist Gifs
   useEffect(() => {
-    async function fechData() {
-      await axios
-        .get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=6`)
-        .then((response) => {
-          setArtistGifs(response.data.data);
-        })
-        .catch((err) => console.log(err.response));
-    }
-    fechData();
-  }, []);
+    dispatch(fetchArtistGifs())
+  }, [dispatch]);
+
 
   return (
     <LayoutBasic>

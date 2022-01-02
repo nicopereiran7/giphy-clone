@@ -3,6 +3,24 @@ import def_axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+export const getTrendingGifs = async () => {
+  try {
+    const { data: response } = await axios.get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=20`);
+    return response;
+  }catch (e) {
+    console.log(e);
+  }
+}
+
+export const getArtistGifs = async () => {
+  try {
+    const { data: response } = await axios.get(`/trending?api_key=${process.env.REACT_APP_API_KEY}&limit=6`);
+    return response;
+  }catch (e) {
+    console.log(e);
+  }
+}
+
 export const getRandomTrendingGif = async (offset) => {
   try {
     const { data: response } = await axios.get(`/trending?api_key=${API_KEY}&limit=8&offset=${offset}`);

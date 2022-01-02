@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
+import { LinearProgress } from "@mui/material";
 import { useHistory } from "react-router-dom";
 
 export default function SlideBasic({ data }) {
@@ -14,6 +15,8 @@ export default function SlideBasic({ data }) {
     slidesToScroll: 1,
     variableWidth: true,
   };
+
+  if(!data) return <LinearProgress />
 
   return (
     <Carousel {...settings}>

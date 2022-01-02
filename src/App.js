@@ -13,6 +13,9 @@ import Search from "./pages/Search";
 import Sport from "./pages/Sport";
 import Entertainment from "./pages/Entertainment";
 import Category from "./pages/Category";
+import NotFound from "./pages/NotFound";
+import { Provider } from "react-redux";
+import store from "./store";
 
 function App() {
   useEffect(() => {
@@ -20,20 +23,23 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/upload" component={Upload} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/gif/:id" component={Gif} />
-        <Route exact path="/channel/:id" component={Channel} />
-        <Route exact path="/user/:username" component={User} />
-        <Route exact path="/search/:term" component={Search} />
-        <Route exact path="/sport" component={Sport} />
-        <Route exact path="/entertaiment" component={Entertainment} />
-        <Route exact path="/categories/:name" component={Category} />
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/upload" component={Upload} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/gif/:id" component={Gif} />
+          <Route exact path="/channel/:id" component={Channel} />
+          <Route exact path="/user/:username" component={User} />
+          <Route exact path="/search/:term" component={Search} />
+          <Route exact path="/sport" component={Sport} />
+          <Route exact path="/entertaiment" component={Entertainment} />
+          <Route exact path="/categories/:name" component={Category} />
+          <Route path='*' component={NotFound} /> 
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 

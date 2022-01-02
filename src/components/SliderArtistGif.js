@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
+import { LinearProgress } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import useScreenSize from "../hooks/useScreenSize";
 
@@ -19,6 +20,10 @@ export default function SliderArtistGif({ data }) {
     autoplaySpeed: 4000,
     cssEase: "linear",
   };
+
+  if(!data) {
+    return <LinearProgress />
+  }
 
   return (
     <Carousel {...settings}>
